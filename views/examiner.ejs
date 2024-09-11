@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <%- include('layouts/header') %> 
+  <title>Examiner Page</title>
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f8f8f8;
+    }
+
+    .container {
+      margin: 20px auto;
+      max-width: 600px;
+      padding: 20px;
+      border-radius: 10px;
+      background-color: #fff;
+      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    label {
+      display: block;
+      margin-bottom: 10px;
+      font-size: 16px;
+      color: #333;
+    }
+
+    select,
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 20px;
+      border: none;
+      border-radius: 5px;
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+    }
+
+    #userList button {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      background-color: #1F2041;
+      color: #fff;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    #userList button:hover {
+      background-color: #4B3F72
+    }
+
+    #userList {
+      list-style: none;
+      padding: 0;
+    }
+
+    #userList li {
+      margin-bottom: 10px;
+      font-size: 16px;
+      color: #333;
+    }
+
+    #testTypeFilter {
+      margin-bottom: 20px;
+    }
+    .user-details {
+      display: none;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+
+    table, th, td {
+      border: 1px solid #ddd;
+    }
+
+    th, td {
+      padding: 8px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+    input[type="submit"] {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        background-color: #FFC857;
+        color: #fff;
+        font-size: 18px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+      input[type="submit"]:hover {
+        background-color: #19647E;
+      }
+
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <label for="testTypeFilter">Filter by Test Type:</label>
+    <select id="testTypeFilter" onchange="filterData()">
+      <option value="all">All</option>
+      <option value="G">G</option>
+      <option value="G2">G2</option>
+    </select>
+
+    <ul id="userList">
+      <% bookedUsers.forEach(user => { %>
+      <li data-test-type="<%= user.testType %>">
+        <button class="users" onclick="toggleDetails(this)"><%= user.firstName %> <%= user.lastName %> - <%= user.testType %></button>
+        
+        <div class="user-details">
+          <table>
+            <tr>
+              <th>Appointment Date</th>
+              <td><%= user.appointment_date.toISOString().split('T')[0] %></td>
+            </tr>
+            <tr>
+              <th>Appointment Time</th>
+              <td><%= user.appointment_time %></td>
+            </tr>
+            <tr>
+              <th>License Number</th>
+              <td><%= user.licenseNumber %></td>
+            </tr>
+            <tr>
+              <th>Car Details</th>
+              <td><%= user.car_details %></td>
+            </tr>
+            <tr>
+              <th>Plate Number</th>
+              <td><%= user.plateNumber %></td>
+            </tr>
+          </table>
+          <form method="post" action="/examiner/updateStatus">
+            <label for="comment">Add Comment:</label>
+            <textarea id="comment" name="comment" rows="4" cols="50"></textarea><br>
+          
+            <label for="passFail">Mark as Pass/Fail:</label>
+            <select id="passFail" name="passFail">
+              <option value="true">Pass</option>
+              <option value="false">Fail</option>
+            </select><br>
+          
+            <input type="hidden" name="userId" value="<%= user.userId %>">
+            <input type="submit" value="Submit">
+          </form>
+        </div>
+      </li>
+      <% }); %>
+    </ul>
+  </div>
+
+  <script>
+    function filterData() {
+      var selectedTestType = document.getElementById('testTypeFilter').value;
+      var userList = document.getElementById('userList').getElementsByTagName('li');
+
+      for (var i = 0; i < userList.length; i++) {
+        var testType = userList[i].getAttribute('data-test-type');
+
+        if (selectedTestType === 'all' || testType === selectedTestType) {
+          userList[i].style.display = 'block';
+        } else {
+          userList[i].style.display = 'none';
+        }
+      }
+    }
+
+    function toggleDetails(button) {
+      var userDetails = button.nextElementSibling;
+      userDetails.style.display = userDetails.style.display === 'block' ? 'none' : 'block';
+    }
+  </script>
+</body>
+  <%- include('layouts/footer') %> 
+</html>

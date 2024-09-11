@@ -1,0 +1,108 @@
+<!-- passFailList.ejs -->
+<!DOCTYPE html>
+<html>
+  <%- include('layouts/header') %> 
+  <head>
+    <title>Pass/Fail List</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        background-color: #f8f8f8;
+      }
+
+      .container {
+        max-width: 800px;
+        margin: 20px auto;
+      }
+
+      h1 {
+        text-align: center;
+        color: #333;
+        text-transform: uppercase;
+        letter-spacing: 3px;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+      }
+
+      th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+      }
+
+      th {
+        background-color: #f2f2f2;
+      }
+
+      .filter-container {
+        margin-bottom: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Pass/Fail Candidates List</h1>
+      <br>
+      <!-- Filter by Pass/Fail -->
+      <div class="filter-container">
+        <label for="filterSelect">Filter by Pass/Fail:</label>
+        <select id="filterSelect" onchange="filterData()">
+          <option value="all">All</option>
+          <option value="pass">Pass</option>
+          <option value="fail">Fail</option>
+        </select>
+      </div>
+
+      <!-- Pass/Fail Candidates Table -->
+      <table id="passFailTable">
+        <thead>
+          <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>License Number</th>
+            <th>Result</th>
+            <th>Comment</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% usersData.forEach(user => { %>
+            <tr data-result="<%= user.result ? 'pass' : 'fail' %>">
+              <td><%= user.firstName %></td>
+              <td><%= user.lastName %></td>
+              <td><%= user.licenseNumber %></td>
+              <td><%= user.result ? 'Pass' : 'Fail' %></td>
+              <td><%= user.comment %></td>
+            </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
+
+    <script>
+      function filterData() {
+        var filterValue = document.getElementById('filterSelect').value;
+        var table = document.getElementById('passFailTable');
+        var rows = table.getElementsByTagName('tr');
+
+        for (var i = 1; i < rows.length; i++) {
+          var row = rows[i];
+          var result = row.getAttribute('data-result');
+
+          if (filterValue === 'all' || result === filterValue) {
+            row.style.display = '';
+          } else {
+            row.style.display = 'none';
+          }
+        }
+      }
+    </script>
+
+  </body>
+  <%- include('layouts/footer') %> 
+</html>

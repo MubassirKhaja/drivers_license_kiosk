@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html>
+   <%- include('layouts/header') %> 
+  <head>
+    <title>G2</title>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        background-color: #f8f8f8;
+      }
+      .login-container {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        height: 70vh;
+        gap: 20px;
+      }
+      .login-form {
+        max-width: 400px;
+        padding: 20px;
+        border-radius: 10px;
+        background-color: #fff;
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+      }
+      .login-form h2 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #333;
+        text-transform: uppercase;
+        letter-spacing: 3px;
+      }
+       h1 {
+        margin-top: 35px;
+        text-align: center;
+        color: #333;
+        text-transform: uppercase;
+        letter-spacing: 3px;
+      }
+      .login-form input[type="text"] {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 20px;
+        border: none;
+        border-radius: 5px;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+      }
+      input[type="submit"] {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        background-color: #333;
+        color: #fff;
+        font-size: 18px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+      input[type="submit"]:hover {
+        background-color: #111;
+      }
+      .login-form p {
+        text-align: center;
+        margin-top: 20px;
+        color: darkgray;
+      }
+      .login-form a {
+        color: #000000;
+        text-decoration: none;
+        transition: color 0.3s ease;
+      }
+      .login-form a:hover {
+        color: #0feb34;
+      }
+      .date-div {
+        margin: 20px auto;
+
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+        max-width: 400px;
+        padding: 20px;
+        border-radius: 10px;
+        background-color: #fff;
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+      }
+
+
+    .appointment-list {
+    margin: 20px auto; /* Updated to center the div horizontally */
+    max-width: 400px;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: #fff;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+  }
+
+  .appointment-list h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+  }
+
+  .appointment-list ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .appointment-list li {
+    margin-bottom: 10px;
+    font-size: 16px;
+    color: #333;
+  }
+
+  .exam-result-box {
+    position: fixed;
+    
+    bottom: 200px;
+    right: 20px;
+    background-color: #fff;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    padding: 10px;
+    z-index: 999; /* Adjust as needed to make sure it's on top */
+  }
+
+
+
+    </style>
+  </head>
+  <body>
+
+  </head>
+
+    <h1>Class G2 Test Registration</h1>
+    <% if (user.licenseNumber == "new_user_default") { %>
+      <form method="post" action="/saveG2data" enctype="application/x-www-form-urlencoded">
+        <div class="login-container">
+            <div class="login-form">
+                <h2>Personal Information</h2>
+                <label for="firstName">First Name:</label>
+                <input type="text" id="firstName" name="firstName" required>
+
+                <label for="lastName">Last Name:</label>
+                <input type="text" id="lastName" name="lastName" required>
+
+                <label for="licenseNumber">License Number (8 characters alphanumeric):</label>
+                <input type="text" id="licenseNumber" name="licenseNumber" pattern="[A-Za-z0-9]{8}" required>
+
+                <label for="age">Age:</label>
+                <input type="number" id="age" name="age" required><br><br>
+
+                <label for="dob">Date of Birth:</label>
+                <input type="date" id="dob" name="dob" required><br><br>
+              </div>
+
+              <div class="login-form">
+                <h2>Car<br>Information</h2>
+
+                <label for="carMake">Car Make:</label>
+                <input type="text" id="carMake" name="carMake" required><br>
+
+                <label for="carModel">Car Model:</label>
+                <input type="text" id="carModel" name="carModel" required><br>
+
+                <label for="carYear">Car Year:</label>
+                <input type="number" id="carYear" name="carYear" required><br><br>
+                
+                <label for="plateNumber">Plate Number:</label>
+                <input type="text" id="plateNumber" name="plateNumber" required><br>
+                <input type="submit" value="Submit">
+                <!-- <input type="submit" value="Submit"> -->
+              </div>
+            </div>
+            
+          </form>
+    <% } else { %>
+        <div class="login-container">
+          <div class="login-form">
+              <h2>Personal Information</h2>
+              <label for="firstName">First Name:</label>
+              <input type="text" id="firstName" name="firstName" value="<%= user.firstname %>">
+
+              <label for="lastName">Last Name:</label>
+              <input type="text" id="lastName" name="lastName" value="<%= user.lastname %>">
+
+              <label for="licenseNumber">License Number (8 characters alphanumeric):</label>
+              <input type="text" id="licenseNumber" name="licenseNumber" pattern="[A-Za-z0-9]{8}" value="<%= user.licenseNumber %>" disabled>
+
+              <label for="age">Age:</label>
+              <input type="number" id="age" name="age" value="<%= user.age %>"><br><br>
+
+              <label for="dob">Date of Birth:</label>
+              <input type="date" id="dob" name="dob" value="<%= user.dob %>"><br><br>
+            </div>
+
+            <div class="login-form">
+              <h2>Car<br>Information</h2>
+
+              <label for="carMake">Car Make:</label>
+              <input type="text" id="carMake" name="carMake" value="<%= user.car_details.carMake %>"><br>
+
+              <label for="carModel">Car Model:</label>
+              <input type="text" id="carModel" name="carModel" value="<%= user.car_details.carModel %>"><br>
+
+              <label for="carYear">Car Year:</label>
+              <input type="number" id="carYear" name="carYear" value="<%= user.car_details.carYear %>"><br><br>
+
+              <label for="plateNumber">Plate Number:</label>
+              <input type="text" id="plateNumber" name="plateNumber" value="<%= user.car_details.plateNumber %>"><br>
+            </div>
+          </div>
+
+      <% } %>
+
+      <% if (userAppointment) { %>
+        <div class="appointment-list">
+          <h2>You have a <b><font color='red'>'<%= testType %>'</font><b>  Appointment on:</h2>
+          <ul>
+            <li>Date: <%= userAppointment.date.toISOString().split('T')[0] %></li>
+            <li>Time: <%= userAppointment.time %></li>
+          </ul>
+        </div>
+      <% } %>
+
+      <% if (examResult) { %>
+        <div class="exam-result-box">
+          <table class="exam-result">
+            <thead>
+              <tr>
+                <th colspan="2" style="text-align: center;"><font color='blue'>Test Result</font></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Result:</td>
+                <td><span style='color: <%= examResult.result ? "green" : "red" %>'><%= examResult.result ? "Pass" : "Fail" %></span></td>
+              </tr>
+              <tr>
+                <td>Comment:</td>
+                <td><%= examResult.comment %></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      <% } %>
+
+
+      <div class="date-div">
+        <form id="dateTimeSelectionForm" action='/appointments/book' method="post">
+          <h2>Book G2 Appointment</h2>
+          <label for="selectedDate">Select Date:</label>
+          <select id="selectedDate" name="selectedDate" required>
+            <% if (availableDates && availableDates.length > 0) { %>
+              <% 
+                  const today = new Date();
+                  const futureDates = availableDates.filter(date => new Date(date) > today);
+              %>
+              <% futureDates.forEach(date => { %>
+                  <option value="<%= date.toISOString().split('T')[0] %>"><%= date.toISOString().split('T')[0] %></option>
+              <% }); %>
+          <% } else { %>
+              <option value="" disabled>No available dates</option>
+          <% } %>
+          </select>
+  
+          <label for="selectedTime">Select Time:</label>
+          <select id="selectedTime" name="selectedTime" required>
+              <option value="" disabled>Select a date first</option>
+          </select>
+          <input type="hidden" id="testType" name="testType" value="G2">
+          <button type="submit">Submit</button>
+      </form>
+  
+      <script>
+          $(document).ready(function () {
+              $('#selectedDate').change(function () {
+                  // Fetch available times when the selected date changes
+                  fetchAvailableTimes();
+              });
+  
+              // Fetch available times on page load if a date is pre-selected
+              fetchAvailableTimes();
+  
+              function fetchAvailableTimes() {
+                  var selectedDate = $('#selectedDate').val();
+                  console.log(selectedDate)
+                  if (selectedDate) {
+                      // AJAX request to fetch available times based on the selected date
+                      $.ajax({
+                          type: 'POST',
+                          url: '/appointments/getTime',
+                          data: { selectedDate: selectedDate },
+                          success: function (data) {
+                            console.log(data)
+                              // Update the available times dropdown with the fetched times
+                              $('#selectedTime').html('');
+                              if (data.length > 0) {
+                                  data.forEach(function (time) {
+                                      $('#selectedTime').append('<option value="' + time + '">' + time + '</option>');
+                                  });
+                              } else {
+                                  $('#selectedTime').append('<option value="" disabled>No available times</option>');
+                              }
+                          }
+                      });
+                  }
+              }
+          });
+      </script>
+  
+      </div>
+
+    
+  </body>
+  <%- include('layouts/footer') %> 
+</html>

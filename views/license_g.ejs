@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html>
+   <%- include('layouts/header') %> 
+  <head>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <title>Login Template</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        background-color: #f8f8f8;
+      }
+      .login-container {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        height: 80vh;
+        gap: 20px;
+      }
+      .login-form {
+        max-width: 400px;
+        padding: 20px;
+        border-radius: 10px;
+        background-color: #fff;
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+      }
+      .login-form h2 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #333;
+        text-transform: uppercase;
+        letter-spacing: 3px;
+      }
+      .login-form h4 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #f3816d;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      .login-form h3 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #66876f;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+      .login-form input[type="text"], input[type="number"] {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 20px;
+        margin-top: 5px;
+        border: none;
+        border-radius: 5px;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+      }
+      input[type="submit"] {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        background-color: #333;
+        color: #fff;
+        font-size: 18px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+      input[type="submit"]:hover {
+        background-color: #111;
+      }
+      .login-form p {
+        text-align: center;
+        margin-top: 20px;
+        color: darkgray;
+      }
+      .login-form a {
+        color: #000000;
+        text-decoration: none;
+        transition: color 0.3s ease;
+      }
+      .login-form a:hover {
+        color: #0feb34;
+      }
+      .appointment-list {
+        margin: 20px auto; /* Updated to center the div horizontally */
+        max-width: 400px;
+        padding: 20px;
+        border-radius: 10px;
+        background-color: #fff;
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+      }
+
+      .appointment-list h2 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #333;
+        text-transform: uppercase;
+        letter-spacing: 3px;
+      }
+
+      .appointment-list ul {
+        list-style: none;
+        padding: 0;
+      }
+
+      .appointment-list li {
+        margin-bottom: 10px;
+        font-size: 16px;
+        color: #333;
+      }
+
+      .exam-result-box {
+    position: fixed;
+    
+    bottom: 200px;
+    right: 20px;
+    background-color: #fff;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    padding: 10px;
+    z-index: 999; /* Adjust as needed to make sure it's on top */
+  }
+    </style>
+  </head>
+  <body>
+    <div class="login-container">
+        <!-- <form method="post" action="/searchLicenseNumber" enctype="application/x-www-form-urlencoded" class="login-form">
+            <h2>Class G Test Book</h2>
+            <label for="licenseNumber">Enter License Number:</label>
+            <input type="text" id="licenseNumber" name="licenseNumber" required><br><br>
+    
+            <input type="submit" value="Search">
+        </form> -->
+        <% if (user) { %>
+          <!-- Display user information -->
+          <div class="login-form">
+            <h2>User Information</h2>
+            <h3>First Name: <%= user.firstname %></h3>
+            <h3>Last Name: <%= user.lastname %></h3>
+            <h3>Age: <%= user.age %></h3>
+            <h3>Date of Birth: <%= user.dob %></h3>
+          </div>
+           
+          <!-- Add form to update car information -->
+          <form method="post" action="/updateCarInfo" enctype="application/x-www-form-urlencoded">
+          <div class="login-form">
+            <h4>License Number: <%= user.licenseNumber %></h4> 
+          <h2>Car Information</h2>
+            <label for="carMake">Car Make:</label>
+            <input type="text" id="carMake" name="carMake" value="<%= user.car_details.carMake %>" required><br>
+    
+            <label for="carModel">Car Model:</label>
+            <input type="text" id="carModel" name="carModel" value="<%= user.car_details.carModel %>" required><br>
+    
+            <label for="carYear">Car Year:</label>
+            <input type="number" id="carYear" name="carYear" value="<%= user.car_details.carYear %>" required><br>
+    
+            <label for="plateNumber">Plate Number:</label>
+            <input type="text" id="plateNumber" name="plateNumber" value="<%= user.car_details.plateNumber %>" required><br>
+    
+            <input type="hidden" name="licenseNumber" value="<%= user.licenseNumber %>">
+            <input type="submit" value="Update Car Info">
+          </form>
+          </div>
+        <% } 
+        
+        else if (user === null) { %>
+          <!-- Display "No User Found" message -->
+          <div class="login-form">
+            <h2>No User Found</h2>
+            <p>License Number not found in the database.</p>
+            <p><a href="/license_g2">Go back to G2 Page</a></p>
+        </div>
+        <% } 
+        else if (user === '') { %>
+          <p>Details updated</p>
+        <% } 
+
+        else if (user === 0) { %>
+          
+        <% } %>
+
+        <% if (userAppointment) { %>
+          <div class="appointment-list">
+            <h2>You have a <b><font color='red'>'<%= testType %>'</font></b>  Appointment on:</h2>
+            <ul>
+              <li>Date: <%= userAppointment.date.toISOString().split('T')[0] %></li>
+              <li>Time: <%= userAppointment.time %></li>
+            </ul>
+          </div>
+        <% } %>
+        
+
+
+        <% if (examResult) { %>
+          <div class="exam-result-box">
+            <table class="exam-result">
+              <thead>
+                <tr>
+                  <th colspan="2" style="text-align: center;"><font color='blue'>Test Result</font></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Result:</td>
+                  <td><span style='color: <%= examResult.result ? "green" : "red" %>'><%= examResult.result ? "Pass" : "Fail" %></span></td>
+                </tr>
+                <tr>
+                  <td>Comment:</td>
+                  <td><%= examResult.comment %></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        <% } %>
+
+
+      <!-- Appointment Booking Form -->
+      <form method="post" action="/appointments/book" enctype="application/x-www-form-urlencoded" class="login-form">
+          <h2>Book G Appointment</h2>
+          <label for="selectedDate">Select Date:</label>
+          <select id="selectedDate" name="selectedDate" required>
+            <% if (availableDates && availableDates.length > 0) { %>
+              <% 
+                  const today = new Date();
+                  const futureDates = availableDates.filter(date => new Date(date) > today);
+              %>
+              <% futureDates.forEach(date => { %>
+                  <option value="<%= date.toISOString().split('T')[0] %>"><%= date.toISOString().split('T')[0] %></option>
+              <% }); %>
+          <% } else { %>
+              <option value="" disabled>No available dates</option>
+          <% } %>
+        </select>
+        <br>
+        <label for="selectedTime">Select Time:</label>
+        <select id="selectedTime" name="selectedTime" required>
+            <option value="" disabled>Select a date first</option>
+        </select>
+        <br>
+        <input type="hidden" id="testType" name="testType" value="G">
+        <button type="submit">Book G Appointment</button>
+
+      </form>
+
+
+    <script>
+      $(document).ready(function () {
+          $('#selectedDate').change(function () {
+              // Fetch available times when the selected date changes
+              fetchAvailableTimes();
+          });
+
+          // Fetch available times on page load if a date is pre-selected
+          fetchAvailableTimes();
+
+          function fetchAvailableTimes() {
+              var selectedDate = $('#selectedDate').val();
+              console.log(selectedDate)
+              if (selectedDate) {
+                  // AJAX request to fetch available times based on the selected date
+                  $.ajax({
+                      type: 'POST',
+                      url: '/appointments/getTime',
+                      data: { selectedDate: selectedDate },
+                      success: function (data) {
+                        console.log(data)
+                          // Update the available times dropdown with the fetched times
+                          $('#selectedTime').html('');
+                          if (data.length > 0) {
+                              data.forEach(function (time) {
+                                  $('#selectedTime').append('<option value="' + time + '">' + time + '</option>');
+                              });
+                          } else {
+                              $('#selectedTime').append('<option value="" disabled>No available times</option>');
+                          }
+                      }
+                  });
+              }
+          }
+      });
+  </script>
+        </div>
+  </body>
+  <%- include('layouts/footer') %> 
+</html>

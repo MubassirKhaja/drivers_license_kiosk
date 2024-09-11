@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+    <%- include('layouts/header') %> 
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@3.10.2/dist/fullcalendar.min.css" />
+        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/moment.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/fullcalendar@3.10.2/dist/fullcalendar.min.js"></script>
+        
+        <title>Appointments</title>
+        <script>
+        $(document).ready(function () {
+            $('#calendar').fullCalendar({
+                header: {
+                    left: 'prev,next',
+                    center: 'title',
+                    right: 'month'
+                },
+                validRange: {
+                    start: moment(), // Current date and forward
+                },
+                weekends: false, // Disable weekends
+                selectable: true,
+                selectHelper: true,
+                select: function (start, end) {
+                    var selectedDate = start.format('YYYY-MM-DD');
+                    $('#selectedDateInput').val(selectedDate);
+                    // $('#dateSelectionForm').submit();
+                },
+                events: 'appointments/all', // Fetch existing appointments from the server
+            });
+        });
+    </script>
+    <style>
+        body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        background-color: #f8f8f8;
+        size: -2%;
+        }
+
+        #calendar {
+            max-width: 600px; /* Set a maximum width */
+            margin: 0 auto; /* Center the calendar on the page */
+        }
+
+    </style>
+  </head>
+  <body>
+
+        <% if (userType === 'Admin') { %>
+            <div id="calendar"></div>
+            <form id="dateSelectionForm" action="appointments/generate" method="post">
+                <input type="hidden" id="selectedDateInput" name="date" value="">
+            </form>
+            <button onclick="generateAppointments()">Generate Appointments</button>
+        <% } else { %>
+            <p>You do not have permission to access this page.</p>
+        <% } %>
+
+        <script>
+            function generateAppointments() {
+                // Call a server-side route to generate appointments and update the calendar
+                $.ajax({
+                type: 'POST',
+                url: 'appointments/generate',
+                data: $('#dateSelectionForm').submit(),
+                success: function () {
+                    $('#calendar').fullCalendar('refetchEvents');
+                }
+            });
+            }
+        </script>
+
+        
+  </body>
+  <%- include('layouts/footer') %> 
+</html>
